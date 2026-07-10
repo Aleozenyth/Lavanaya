@@ -1,0 +1,7 @@
+{
+    "_comment": "Tambahkan/pastikan baris ini ada di composer.json project Laravel kamu (di bagian require), lalu jalankan composer update.",
+    "require": {
+        "php": "^8.2",
+        "laravel/framework": "^11.0"
+    }
+}
