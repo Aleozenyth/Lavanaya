@@ -66,12 +66,19 @@ class WorkflowService
 
     /**
      * Cek ketersediaan budget kategori untuk bulan berjalan (Kondisi 4 & 7).
+     *
+     * Menerima Carbon/DateTimeInterface ATAU string tanggal ("Y-m-d"),
+     * supaya tidak bergantung pada cast model selalu aktif di semua environment.
      */
-    public function getBudgetFor(Category $category, string $date): ?Budget
+    public function getBudgetFor(Category $category, $date): ?Budget
     {
+        $date = $date instanceof \DateTimeInterface
+            ? $date
+            : \Carbon\Carbon::parse((string) $date);
+
         return Budget::where('category_id', $category->id)
-            ->where('year', date('Y', strtotime($date)))
-            ->where('month', (int) date('n', strtotime($date)))
+            ->where('year', $date->format('Y'))
+            ->where('month', (int) $date->format('n'))
             ->first();
     }
 
@@ -82,7 +89,7 @@ class WorkflowService
     {
         return DB::transaction(function () use ($submission) {
             $category = $submission->category;
-            $budget = $this->getBudgetFor($category, \Carbon\Carbon::parse($submission->tanggal_pengajuan));
+            $budget = $this->getBudgetFor($category, $submission->tanggal_pengajuan);
 
             // Kondisi 4: budget kategori tidak mencukupi -> langsung ditolak
             if ($budget && ! $budget->hasEnoughBudget((float) $submission->nilai)) {
@@ -159,7 +166,7 @@ class WorkflowService
     {
         DB::transaction(function () use ($submission, $decision, $notes, $actorUserId) {
             $category = $submission->category;
-            $budget = $this->getBudgetFor($category, \Carbon\Carbon::parse($submission->tanggal_pengajuan));
+            $budget = $this->getBudgetFor($category, $submission->tanggal_pengajuan);
 
             if ($decision === 'paid') {
                 if ($budget && ! $budget->hasEnoughBudget((float) $submission->nilai)) {

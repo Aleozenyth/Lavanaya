@@ -1,25 +1,10 @@
 @extends('layouts.app')
 @section('title', 'Detail Pengajuan')
 
-@php
-    $statusColors = [
-        'draft' => 'secondary',
-        'submitted' => 'info',
-        'waiting_spv' => 'warning',
-        'waiting_manager' => 'warning',
-        'waiting_director' => 'warning',
-        'waiting_finance' => 'primary',
-        'paid' => 'success',
-        'rejected' => 'danger',
-    ];
-@endphp
-
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3 class="mb-0">Detail Pengajuan {{ $submission->nomor_pengajuan }}</h3>
-        <span class="badge bg-{{ $statusColors[$submission->status] ?? 'secondary' }} fs-6">
-            {{ $submission->statusLabel() }}
-        </span>
+        <h3 class="mb-0 ref-number">{{ $submission->nomor_pengajuan }}</h3>
+        <x-stamp :status="$submission->status" />
     </div>
 
     <div class="row g-4">
@@ -34,7 +19,7 @@
                         </tr>
                         <tr>
                             <th>Tanggal Pengajuan</th>
-                            <td>{{ date('d-m-Y', strtotime($submission->tanggal_pengajuan)) }}</td>
+                            <td>{{ \Carbon\Carbon::parse($submission->tanggal_pengajuan)->format('d-m-Y') }}</td>
                         </tr>
                         <tr>
                             <th>Nama Pengaju</th>
@@ -46,7 +31,7 @@
                         </tr>
                         <tr>
                             <th>Nilai Pengajuan</th>
-                            <td>Rp {{ number_format($submission->nilai, 0, ',', '.') }}</td>
+                            <td class="money">Rp {{ number_format($submission->nilai, 0, ',', '.') }}</td>
                         </tr>
                         <tr>
                             <th>Deskripsi</th>
@@ -78,13 +63,13 @@
                 <div class="card shadow-sm">
                     <div class="card-header">Informasi Pembayaran (Finance)</div>
                     <div class="card-body">
-                        <p class="mb-1">Status: <span class="badge bg-{{ $submission->payment->status === 'paid' ? 'success' : 'danger' }}">{{ ucfirst($submission->payment->status) }}</span></p>
+                        <p class="mb-2">Status: <x-stamp :status="$submission->payment->status" /></p>
                         <p class="mb-1">Diproses oleh: {{ $submission->payment->processor->name }}</p>
                         @if($submission->payment->notes)
                             <p class="mb-1">Catatan: {{ $submission->payment->notes }}</p>
                         @endif
                         @if($submission->payment->paid_at)
-                            <p class="mb-0 text-muted small">{{ $submission->payment->paid_at->format('d-m-Y H:i') }}</p>
+                            <p class="mb-0 text-muted small mono">{{ \Carbon\Carbon::parse($submission->payment->paid_at)->format('d-m-Y H:i') }}</p>
                         @endif
                     </div>
                 </div>
@@ -93,30 +78,31 @@
 
         <div class="col-md-5">
             <div class="card shadow-sm">
-                <div class="card-header">Riwayat Approval</div>
-                <ul class="list-group list-group-flush">
+                <div class="card-header">Riwayat Persetujuan</div>
+                <div class="card-body">
                     @forelse($submission->approvals as $approval)
-                        <li class="list-group-item">
-                            <div class="d-flex justify-content-between">
-                                <strong class="text-uppercase">{{ $approval->approver_role }}</strong>
-                                <span class="badge bg-{{ $approval->status === 'approved' ? 'success' : ($approval->status === 'rejected' ? 'danger' : 'secondary') }}">
-                                    {{ ucfirst($approval->status) }}
-                                </span>
+                        @php
+                            $dotClass = $approval->status === 'approved' ? 'dot-approved' : ($approval->status === 'rejected' ? 'dot-rejected' : 'dot-pending');
+                        @endphp
+                        <div class="route-item {{ $dotClass }}">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <strong class="text-uppercase small">{{ $approval->approver_role }}</strong>
+                                <x-stamp :status="$approval->status" />
                             </div>
                             @if($approval->approver)
-                                <div class="small text-muted">oleh {{ $approval->approver->name }}</div>
+                                <div class="small text-muted mt-1">oleh {{ $approval->approver->name }}</div>
                             @endif
                             @if($approval->notes)
-                                <div class="small mt-1">"{{ $approval->notes }}"</div>
+                                <div class="small mt-1">Catatan: {{ $approval->notes }}</div>
                             @endif
                             @if($approval->acted_at)
-                                <div class="small text-muted">{{ date('d-m-Y H:i', strtotime($approval->acted_at)) }}</div>
+                                <div class="small text-muted mono">{{ \Carbon\Carbon::parse($approval->acted_at)->format('d-m-Y H:i') }}</div>
                             @endif
-                        </li>
+                        </div>
                     @empty
-                        <li class="list-group-item text-muted">Tidak ada tahap approval (langsung ke Finance).</li>
+                        <p class="text-muted mb-0">Tidak ada tahap approval (langsung ke Finance).</p>
                     @endforelse
-                </ul>
+                </div>
             </div>
         </div>
     </div>

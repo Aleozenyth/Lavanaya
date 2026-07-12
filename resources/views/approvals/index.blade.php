@@ -20,13 +20,13 @@
                 <tbody>
                     @forelse($submissions as $submission)
                         <tr>
-                            <td>
+                            <td class="ref-number">
                                 <a href="{{ route('submissions.show', $submission) }}">{{ $submission->nomor_pengajuan }}</a>
                             </td>
                             <td>{{ $submission->user->name }}</td>
                             <td>{{ $submission->category->name }}</td>
-                            <td>Rp {{ number_format($submission->nilai, 0, ',', '.') }}</td>
-                            <td>{{ optional($submission->submitted_at)->format('d-m-Y H:i') }}</td>
+                            <td class="money">Rp {{ number_format($submission->nilai, 0, ',', '.') }}</td>
+                            <td class="mono small text-muted">{{ $submission->submitted_at ? \Carbon\Carbon::parse($submission->submitted_at)->format('d-m-Y H:i') : '-' }}</td>
                             <td>
                                 <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#approveModal{{ $submission->id }}">
                                     Approve

@@ -23,16 +23,16 @@
                             $budget = app(\App\Services\WorkflowService::class)->getBudgetFor($submission->category, $submission->tanggal_pengajuan);
                         @endphp
                         <tr>
-                            <td>
+                            <td class="ref-number">
                                 <a href="{{ route('submissions.show', $submission) }}">{{ $submission->nomor_pengajuan }}</a>
                             </td>
                             <td>{{ $submission->user->name }}</td>
                             <td>{{ $submission->category->name }}</td>
-                            <td>Rp {{ number_format($submission->nilai, 0, ',', '.') }}</td>
-                            <td>{{ optional($submission->submitted_at)->format('d-m-Y H:i') }}</td>
+                            <td class="money">Rp {{ number_format($submission->nilai, 0, ',', '.') }}</td>
+                            <td class="mono small text-muted">{{ $submission->submitted_at ? \Carbon\Carbon::parse($submission->submitted_at)->format('d-m-Y H:i') : '-' }}</td>
                             <td>
                                 @if($budget)
-                                    <div class="small text-muted mb-1">
+                                    <div class="small text-muted mb-1 money">
                                         Sisa saldo: Rp {{ number_format($budget->remaining, 0, ',', '.') }}
                                     </div>
                                 @endif

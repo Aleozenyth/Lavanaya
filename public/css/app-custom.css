@@ -1,0 +1,304 @@
+/* =========================================================
+   DESIGN SYSTEM — "Routing Ledger"
+   A visual identity built around the idea that a submission
+   is a physical document travelling through a chain of desks,
+   getting stamped at every stop.
+   ========================================================= */
+
+:root {
+  --ink: #14213D;
+  --ink-soft: #1F3358;
+  --paper: #ECEEE7;
+  --paper-line: #D8DCD1;
+  --paper-card: #F6F7F2;
+  --slate: #57687A;
+  --brass: #A17A3D;
+  --brass-deep: #7D5F2E;
+  --forest: #33604A;
+  --forest-soft: #E4EEE8;
+  --oxblood: #833838;
+  --oxblood-soft: #F3E4E1;
+  --amber: #A9791E;
+  --amber-soft: #F6ECD6;
+  --slate-soft: #E5E8E4;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Inter', -apple-system, sans-serif;
+}
+
+h1, h2, h3, h4, h5, .brand-font {
+  font-family: 'Source Serif 4', Georgia, serif;
+  letter-spacing: -0.005em;
+  font-weight: 600;
+}
+
+.mono, .money, .ref-number {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-feature-settings: "tnum";
+}
+
+/* ---------- Header / Ledger spine ---------- */
+.ledger-header {
+  background: var(--ink);
+  border-bottom: 3px solid var(--brass);
+}
+
+.ledger-header .navbar-brand {
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-weight: 600;
+  font-size: 1.2rem;
+  color: #F3EFE3 !important;
+  letter-spacing: 0;
+}
+
+.ledger-header .navbar-brand small {
+  display: block;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--brass);
+  font-weight: 500;
+  opacity: 0.85;
+}
+
+.ledger-header .nav-link {
+  color: #C9D0DC !important;
+  font-size: 0.92rem;
+  border-bottom: 2px solid transparent;
+  transition: color .15s, border-color .15s;
+}
+
+.ledger-header .nav-link:hover,
+.ledger-header .nav-link.active {
+  color: #fff !important;
+  border-bottom-color: var(--brass);
+}
+
+.role-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: var(--brass);
+  color: var(--ink);
+  padding: 3px 9px;
+  border-radius: 2px;
+  font-weight: 600;
+}
+
+/* ---------- Cards as "documents" ---------- */
+.card {
+  background: var(--paper-card);
+  border: 1px solid var(--paper-line);
+  border-radius: 3px;
+  box-shadow: 0 1px 2px rgba(20,33,61,0.05);
+}
+
+.card-header {
+  background: transparent;
+  border-bottom: 1px solid var(--paper-line);
+  font-family: 'Source Serif 4', serif;
+  font-weight: 600;
+  font-size: 0.98rem;
+  color: var(--ink);
+  padding: .9rem 1.1rem;
+}
+
+/* ---------- Buttons ---------- */
+.btn-primary {
+  background: var(--ink);
+  border-color: var(--ink);
+  font-weight: 500;
+  border-radius: 2px;
+}
+.btn-primary:hover, .btn-primary:focus {
+  background: var(--ink-soft);
+  border-color: var(--ink-soft);
+}
+
+.btn-outline-secondary {
+  color: var(--slate);
+  border-color: var(--paper-line);
+  border-radius: 2px;
+}
+.btn-outline-secondary:hover {
+  background: var(--slate-soft);
+  color: var(--ink);
+  border-color: var(--paper-line);
+}
+
+.btn-success {
+  background: var(--forest);
+  border-color: var(--forest);
+  border-radius: 2px;
+}
+.btn-danger {
+  background: var(--oxblood);
+  border-color: var(--oxblood);
+  border-radius: 2px;
+}
+
+/* ---------- Tables ---------- */
+.table thead.table-light th {
+  background: var(--slate-soft);
+  color: var(--slate);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+  border-bottom: none;
+}
+.table td, .table th {
+  border-color: var(--paper-line);
+}
+.table-hover tbody tr:hover {
+  background: var(--slate-soft);
+}
+
+/* ---------- Stat blocks (dashboard) ---------- */
+.ledger-stat {
+  background: var(--paper-card);
+  border: 1px solid var(--paper-line);
+  border-left: 4px solid var(--brass);
+  border-radius: 2px;
+  padding: 1.1rem 1.2rem;
+}
+.ledger-stat .label {
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--slate);
+  font-weight: 600;
+}
+.ledger-stat .value {
+  font-family: 'Source Serif 4', serif;
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.1;
+}
+
+/* =========================================================
+   SIGNATURE ELEMENT — the certification seal
+   A precise, rectangular ink-stamp mark with a double rule,
+   the way a status is certified on an official ledger page.
+   Deliberately unrotated and exact — this is a formal record,
+   not a playful badge.
+   ========================================================= */
+.stamp {
+  --stamp-color: var(--slate);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 96px;
+  height: 32px;
+  padding: 0 12px;
+  border: 1.5px solid var(--stamp-color);
+  border-radius: 2px;
+  position: relative;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--stamp-color);
+  background: transparent;
+}
+.stamp::before {
+  content: "";
+  position: absolute;
+  inset: 2.5px;
+  border-top: 1px solid var(--stamp-color);
+  border-bottom: 1px solid var(--stamp-color);
+  opacity: 0.45;
+}
+
+.stamp-pending   { --stamp-color: var(--amber); }
+.stamp-approved  { --stamp-color: var(--forest); }
+.stamp-rejected  { --stamp-color: var(--oxblood); }
+.stamp-draft     { --stamp-color: var(--slate); }
+.stamp-finance   { --stamp-color: var(--brass-deep); }
+
+/* ---------- Timeline (approval history) ---------- */
+.route-item {
+  position: relative;
+  padding-left: 28px;
+  padding-bottom: 1.1rem;
+  border-left: 2px solid var(--paper-line);
+  margin-left: 8px;
+}
+.route-item:last-child {
+  border-left-color: transparent;
+  padding-bottom: 0;
+}
+.route-item::before {
+  content: "";
+  position: absolute;
+  left: -7px;
+  top: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 2px solid var(--dot-color, var(--slate));
+}
+.route-item.dot-approved { --dot-color: var(--forest); }
+.route-item.dot-rejected { --dot-color: var(--oxblood); }
+.route-item.dot-pending  { --dot-color: var(--amber); }
+
+/* ---------- Login page ---------- */
+.login-shell {
+  min-height: 100vh;
+  background: var(--ink);
+}
+.login-card {
+  background: var(--paper-card);
+  border-radius: 3px;
+  border-top: 3px solid var(--brass);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.28);
+}
+.login-mark {
+  font-family: 'Source Serif 4', serif;
+  font-weight: 600;
+  font-size: 1.45rem;
+  color: var(--ink);
+}
+.login-mark .eyebrow {
+  display: block;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--brass-deep);
+  margin-bottom: 4px;
+}
+
+/* ---------- Alerts ---------- */
+.alert-success {
+  background: var(--forest-soft);
+  border-color: var(--forest);
+  color: var(--forest);
+  border-left: 4px solid var(--forest);
+  border-radius: 2px;
+}
+.alert-danger {
+  background: var(--oxblood-soft);
+  border-color: var(--oxblood);
+  color: var(--oxblood);
+  border-left: 4px solid var(--oxblood);
+  border-radius: 2px;
+}
+
+/* Focus visibility (accessibility) */
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}

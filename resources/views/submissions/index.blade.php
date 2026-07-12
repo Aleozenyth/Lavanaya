@@ -1,19 +1,6 @@
 @extends('layouts.app')
 @section('title', 'Pengajuan Saya')
 
-@php
-    $statusColors = [
-        'draft' => 'secondary',
-        'submitted' => 'info',
-        'waiting_spv' => 'warning',
-        'waiting_manager' => 'warning',
-        'waiting_director' => 'warning',
-        'waiting_finance' => 'primary',
-        'paid' => 'success',
-        'rejected' => 'danger',
-    ];
-@endphp
-
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h3 class="mb-0">Pengajuan Saya</h3>
@@ -36,14 +23,12 @@
                 <tbody>
                     @forelse($submissions as $submission)
                         <tr>
-                            <td>{{ $submission->nomor_pengajuan }}</td>
-                            <td>{{ date('d-m-Y', strtotime($submission->tanggal_pengajuan)) }}</td>
+                            <td class="ref-number">{{ $submission->nomor_pengajuan }}</td>
+                            <td>{{ \Carbon\Carbon::parse($submission->tanggal_pengajuan)->format('d-m-Y') }}</td>
                             <td>{{ $submission->category->name }}</td>
-                            <td>Rp {{ number_format($submission->nilai, 0, ',', '.') }}</td>
+                            <td class="money">Rp {{ number_format($submission->nilai, 0, ',', '.') }}</td>
                             <td>
-                                <span class="badge bg-{{ $statusColors[$submission->status] ?? 'secondary' }}">
-                                    {{ $submission->statusLabel() }}
-                                </span>
+                                <x-stamp :status="$submission->status" />
                             </td>
                             <td>
                                 <a href="{{ route('submissions.show', $submission) }}" class="btn btn-sm btn-outline-primary">Detail</a>
