@@ -44,11 +44,19 @@ class ApprovalController extends Controller
             'notes' => ['nullable', 'string', 'max:1000'],
         ]);
 
-        $approval = $submission->approvals()
-            ->where('approver_role', $role)
-            ->where('status', 'pending')
-            ->orderBy('sequence')
-            ->firstOrFail();
+        // Ambil approval paling awal (sequence terkecil) yang MASIH pending
+        // di seluruh rantai — bukan hanya milik role yang sedang login.
+        // Ini mencegah tahap belakangan (mis. Manager) diproses lebih dulu
+        // sebelum tahap sebelumnya (mis. SPV) benar-benar selesai.
+        $approval = $submission->currentApproval();
+
+        abort_if(! $approval, 404, 'Tidak ada approval yang sedang menunggu untuk pengajuan ini.');
+
+        abort_unless(
+            $approval->approver_role === $role,
+            403,
+            'Pengajuan ini sedang menunggu approval ' . strtoupper($approval->approver_role) . ', belum giliran ' . strtoupper($role) . '.'
+        );
 
         $this->workflow->act($submission, $approval, $validated['decision'], $validated['notes'] ?? null, $request->user()->id);
 
